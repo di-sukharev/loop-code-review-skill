@@ -1,94 +1,44 @@
-# Loop Review
+# loop-review
 
-Loop Review packages the `loop-code-review` Agent Skill: an iterative review-and-fix workflow for active git changes.
+An agent skill that turns code review into a loop with a verifiable exit condition. Works in Claude Code, OpenAI Codex CLI, and any runtime that supports the [Agent Skills](https://agentskills.io) format.
 
-The skill asks a fresh independent reviewer agent without the orchestrator's conversation history to inspect only the current task's scoped changes. The reviewer must reconstruct and explain the change as a future maintainer, while also checking correctness, security, test evidence, and other concrete risks. The loop fixes actionable findings, validates the touched surface, and repeats until validation is green and the latest reviewer has no unresolved actionable findings and either scores the result at least 9.5/10 or explicitly reports no actionable findings.
+## [`loop-code-review`](loop-code-review/SKILL.md)
 
-## Install with Codex
+The skill reviews the current task's active git changes — not the whole dirty worktree — through fresh independent reviewer agents that start without the orchestrator's conversation history and rediscover the facts from the repository themselves.
 
-Add this repository as a Codex plugin marketplace:
+Review is framed as a handoff: the reviewer must reconstruct what the change does, its control flow, its invariants, and its failure behavior, and a specific comprehension obstacle becomes an actionable maintainability finding. Alongside that it checks correctness, security, data integrity, test evidence, reuse of established project solutions, and architecture fit.
 
-```bash
-codex plugin marketplace add di-sukharev/loop-review
-```
+The loop fixes actionable findings, validates the touched surface, and repeats with a new reviewer until validation is green and the latest reviewer has no unresolved actionable findings and either scores the result at least **9.5/10** or explicitly reports no actionable findings. A high score never overrides an unresolved finding or red validation, and pass-limit exhaustion or stagnation is reported as an incomplete outcome rather than success.
 
-Then install the `loop-review` plugin from that marketplace in Codex. Invoke the bundled skill as `$loop-code-review`.
+## Install
 
-## Install with Claude Code
+Copy the skill directory into your agent's skills folder.
 
-Add the marketplace:
+Claude Code:
 
-```text
-/plugin marketplace add di-sukharev/loop-review
-```
-
-Install the plugin:
-
-```text
-/plugin install loop-review@loop-review
-```
-
-Reload plugins so the newly installed skill is available in the current session:
-
-```text
-/reload-plugins
-```
-
-Invoke the plugin skill:
-
-```text
-/loop-review:loop-code-review
-```
-
-## Direct Skill Install
-
-If you do not want to use plugin marketplaces, copy or symlink `skills/loop-code-review` into one of your tool's skill directories:
-
-```bash
-# Codex user skill
-mkdir -p ~/.agents/skills
-ln -s "$(pwd)/skills/loop-code-review" ~/.agents/skills/loop-code-review
-
-# Claude Code personal skill
+```sh
+git clone https://github.com/di-sukharev/loop-review.git
 mkdir -p ~/.claude/skills
-ln -s "$(pwd)/skills/loop-code-review" ~/.claude/skills/loop-code-review
+cp -R loop-review/loop-code-review ~/.claude/skills/
 ```
 
-## What It Enforces
+Codex CLI:
 
-- Scope review to the current task's files or hunks.
-- Keep reviewers independent by starting every scoring pass in a fresh isolated conversation context without the parent's conversation history.
-- Treat review as a structured handoff: require the reviewer to explain the change's responsibility and important flow, and make specific comprehension obstacles actionable when they create future change risk.
-- Treat reviewer output as code-review findings, not as commands to obey blindly.
-- Never let a high score override an unresolved actionable finding or failing validation.
-- Check test evidence, reuse of established project solutions, and architecture fit when relevant; require concrete repository evidence for those findings.
-- Validate after meaningful fixes.
-- Repeat with a fresh reviewer until the acceptance signal is strong.
-- Detect ambiguous task ownership, stale reviews, pass-limit exhaustion, and review stagnation without silently declaring success.
-
-## Evaluation Cases
-
-[`evals/cases.json`](evals/cases.json) captures the expected behavior for comprehensibility and necessary complexity, clean reviews, high scores with unresolved findings, test trustworthiness, reuse and architecture checks, mixed worktrees, red validation, and loop stagnation.
-
-## Repository Layout
-
-```text
-.codex-plugin/plugin.json       Codex plugin manifest
-.agents/plugins/marketplace.json Codex repo marketplace
-.claude-plugin/plugin.json      Claude Code plugin manifest
-.claude-plugin/marketplace.json Claude Code marketplace
-evals/cases.json                Behavioral evaluation scenarios
-skills/loop-code-review/        Agent Skill source
+```sh
+git clone https://github.com/di-sukharev/loop-review.git
+mkdir -p ~/.codex/skills
+cp -R loop-review/loop-code-review ~/.codex/skills/
 ```
 
-## References
+Codex also reads `~/.agents/skills` and, per project, `.agents/skills`; Claude Code also reads a project's `.claude/skills`. Copy into whichever scope you want the skill in, and copy again to update.
 
-- [Codex skills](https://developers.openai.com/codex/skills)
-- [Codex plugin packaging](https://developers.openai.com/codex/plugins/build)
-- [Claude Code skills](https://code.claude.com/docs/en/skills)
-- [Claude Code plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
-- [Agent Skills specification](https://agentskills.io/specification)
+Or hand the repository to your agent and ask it to install the skill into your skills directory — the layout is the standard one, so it can place the folder itself.
+
+## Use
+
+- `/loop-code-review` in Claude Code, `$loop-code-review` in Codex.
+- Or just ask the agent to keep reviewing and fixing the current task's changes until an independent reviewer signs off.
 
 ## License
 
-MIT
+[MIT](LICENSE)
