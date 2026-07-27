@@ -1,4 +1,4 @@
-# loop-review
+# loop-code-review-skill
 
 An agent skill that turns code review into a loop with a verifiable exit condition. Works in Claude Code, OpenAI Codex CLI, and any runtime that supports the [Agent Skills](https://agentskills.io) format.
 
@@ -17,17 +17,17 @@ Copy the skill directory into your agent's skills folder.
 Claude Code:
 
 ```sh
-git clone https://github.com/di-sukharev/loop-review.git
+git clone https://github.com/di-sukharev/loop-code-review-skill.git
 mkdir -p ~/.claude/skills
-cp -R loop-review/loop-code-review ~/.claude/skills/
+cp -R loop-code-review-skill/loop-code-review ~/.claude/skills/
 ```
 
 Codex CLI:
 
 ```sh
-git clone https://github.com/di-sukharev/loop-review.git
+git clone https://github.com/di-sukharev/loop-code-review-skill.git
 mkdir -p ~/.codex/skills
-cp -R loop-review/loop-code-review ~/.codex/skills/
+cp -R loop-code-review-skill/loop-code-review ~/.codex/skills/
 ```
 
 Codex also reads `~/.agents/skills` and, per project, `.agents/skills`; Claude Code also reads a project's `.claude/skills`. Copy into whichever scope you want the skill in, and copy again to update.
