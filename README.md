@@ -8,7 +8,7 @@ The skill reviews the current task's active git changes — not the whole dirty 
 
 Review is framed as a handoff: the reviewer must reconstruct what the change does, its control flow, its invariants, and its failure behavior, and a specific comprehension obstacle becomes an actionable maintainability finding. Alongside that it checks correctness, security, data integrity, test evidence, reuse of established project solutions, and architecture fit.
 
-The loop fixes actionable findings, validates the touched surface, and repeats with a new reviewer until validation is green and the latest reviewer has no unresolved actionable findings and either scores the result at least **9.5/10** or explicitly reports no actionable findings. A high score never overrides an unresolved finding or red validation, and pass-limit exhaustion or stagnation is reported as an incomplete outcome rather than success.
+Each reviewer completes the whole scoped review and returns the full substantiated finding set before fixes begin. The loop resolves accepted findings as a coherent batch, validates the result, and repeats with a fresh reviewer after the task-owned files or hunks under review change. It finishes when validation is green, the reviewer demonstrates a credible understanding of the change, no unresolved actionable findings remain, and test evidence for changed behavior is trustworthy or concretely justified. The numeric score remains a visible progress signal but never creates work or controls acceptance.
 
 ## Install
 
