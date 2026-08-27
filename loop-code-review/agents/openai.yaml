@@ -1,4 +1,4 @@
 interface:
   display_name: "Loop Code Review"
-  short_description: "Review for safe maintenance and change risk"
-  default_prompt: "Use $loop-code-review to review the complete task-scoped changes in coherent passes until validation is green and no actionable findings remain, while reporting the score as a progress signal."
+  short_description: "Iterative independent review-and-fix loop"
+  default_prompt: "Use $loop-code-review to run the iterative independent review workflow on only this task's active changes."
