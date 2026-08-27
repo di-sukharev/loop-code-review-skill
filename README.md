@@ -1,5 +1,9 @@
 # loop-code-review-skill
 
+<p align="center">
+  <img src="assets/loop-code-review-cycle.png" alt="Fresh independent reviewers inspect, score, and improve each iteration" width="900">
+</p>
+
 An agent skill that turns code review into a loop with a verifiable exit condition. Works in Claude Code, OpenAI Codex CLI, and any runtime that supports the [Agent Skills](https://agentskills.io) format.
 
 ## [`loop-code-review`](loop-code-review/SKILL.md)
