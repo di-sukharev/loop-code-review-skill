@@ -10,7 +10,7 @@ Review the current task as a handoff to another engineer. Independently test whe
 ## Invariants
 
 - **Task scope:** Review only task-owned active changes, including relevant untracked files and mixed-file hunks. Determine ownership from the current task and edits made during it, not from `git status` alone. Read neighboring code for context, but report only problems caused or worsened by the scoped change, including missed requirements. If ownership is ambiguous, ask the user.
-- **Independent reviewer:** Each review pass uses a fresh read-only agent without parent conversation history, reasoning, assumptions, or prior review discussion. In Codex, spawn it with `fork_turns: "none"`; elsewhere use the equivalent fresh-context mechanism.
+- **Independent reviewer:** Each review pass uses a fresh read-only agent without parent conversation history, reasoning, assumptions, or prior review discussion. In Codex, spawn it with `fork_turns: "none"`; elsewhere use the equivalent fresh-context mechanism. The reviewer completes the pass itself: it must not invoke this skill or another review workflow, delegate the review, or edit files.
 - **Stable state:** Snapshot the scoped patch before review and compare it when the reviewer returns. Any relevant change makes the review stale and requires a fresh pass after validation. For unchanged state, use the same reviewer for clarification or reconsideration.
 - **Evidence over scores:** Concrete findings and validation control the outcome. Scores only show progress and never create work, excuse findings, or gate acceptance.
 - **Worktree safety:** Preserve unrelated changes. Do not stage, commit, reset, stash, push, or modify out-of-scope files unless the user explicitly asks.

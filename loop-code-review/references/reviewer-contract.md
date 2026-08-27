@@ -5,6 +5,8 @@ Use this template for each review pass. Replace placeholders with factual contex
 ```text
 Independently review only the task-scoped active changes below. You have no parent conversation history. Stay read-only: do not edit, stage, commit, reset, stash, or push files, and run only checks that cannot alter tracked or user-owned state.
 
+Complete this review pass yourself. Do not invoke this skill or another review workflow, and do not delegate the review to another agent.
+
 Repository: <path>
 Task brief and acceptance criteria: <requirements or authoritative specification>
 Included scope: <files, untracked files, and mixed-file hunks>
