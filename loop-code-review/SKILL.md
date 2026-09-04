@@ -24,23 +24,24 @@ Review the current task as a handoff to another engineer. Independently test whe
    - If there are no task-owned active changes, report `no-changes` and stop.
 
 2. **Validate the scoped state.**
-   - Run the smallest meaningful non-destructive tests, typecheck, lint, build, or focused checks for the changed surface.
+   - Run the smallest meaningful non-destructive tests, typecheck, lint, build, or focused checks for the changed surface. Do not run a repository-wide gate solely to prepare a review; leave the final broad gate to the owning task workflow unless it is the only meaningful scoped check.
    - Fix only failures caused by the scoped task. Record pre-existing, unrelated, flaky, or environmental failures as evidence or blockers without expanding scope.
-   - Record exact commands and factual outcomes. If meaningful validation is unavailable, explain why.
+   - Record exact commands and compact factual outcomes — the failure tail when a command fails, not passing logs. Reuse evidence keyed to the scoped-state identifier while the snapshot is unchanged. If meaningful validation is unavailable, explain why.
    - Refresh the scope and snapshot after any command that changes the worktree.
 
 3. **Run one review pass.**
    - Read [references/reviewer-contract.md](references/reviewer-contract.md) and use it as the canonical reviewer prompt.
    - Give the reviewer the repository path, factual task brief, acceptance criteria, included scope, exclusions, scoped-state identifier, and validation commands with factual outcomes.
-   - Require independent repository inspection. The reviewer may rerun only checks that are safe for tracked and user-owned files.
+   - Require independent repository inspection. The reviewer may rerun only checks that are safe for tracked and user-owned files, and a broad green suite only for a concrete evidence concern that focused inspection cannot resolve.
 
 4. **Triage the complete review before editing.**
-   - Ask the same reviewer once to complete missing required output or explain an unclear understanding summary. If it still cannot, replace it with one fresh reviewer; if that review is also unusable, stop `incomplete`.
+   - Require the complete finding set before editing. Ask the same reviewer once to finish an incomplete review, complete missing required output, or explain an unclear understanding summary. If it still cannot, replace it with one fresh reviewer; if that review is also unusable, stop `incomplete`.
    - Accept evidence-backed findings within the contract's review scope. Reject speculative refactors, optional hardening, and subjective polish.
    - For a material disputed finding, read [references/adjudication.md](references/adjudication.md).
 
 5. **Fix, validate, and repeat.**
-   - Resolve accepted findings as one coherent batch when safe, then rerun scoped validation, refresh the full task-owned scope, and start a fresh review pass per the stable-state invariant.
+   - Resolve the complete set of accepted findings as one coherent batch when safe, then rerun affected scoped validation, refresh the full task-owned scope, and start a fresh review pass per the stable-state invariant.
+   - If two fix/review cycles reveal the same underlying failure class, stop local patching and re-examine the owning flow before another pass.
 
 ## Completion
 

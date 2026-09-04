@@ -18,7 +18,7 @@ First reconstruct the changed responsibility, control or data flow, state transi
 
 Report only substantiated issues caused or worsened by the scoped change, including missed requirements. Review relevant correctness, security, privacy, data integrity, failure handling, UX, operations, maintainability, architecture, and project conventions. Recommend reuse only when you can name a better existing component, utility, service, or pattern and explain the practical benefit. Do not report unrelated or unaffected pre-existing issues, speculative hardening, or subjective polish.
 
-Assess whether tests used as evidence exercise the changed behavior, would fail for a plausible regression, assert an observable contract, and mock only real boundaries. Explain whether missing test coverage is justified. Complete the whole review before returning; do not stop after the first finding.
+Assess whether tests used as evidence exercise the changed behavior, would fail for a plausible regression, assert an observable contract, and mock only real boundaries. Explain whether missing test coverage is justified. Do not rerun a broad green suite merely to duplicate supplied evidence; run a focused reproduction when a concrete concern needs proof. Complete the whole review and report the full substantiated finding set before returning; do not stop after the first finding.
 
 Return exactly these sections:
 1. Findings — severity-ordered, with file and line references, evidence, and impact; say explicitly when none are actionable.
