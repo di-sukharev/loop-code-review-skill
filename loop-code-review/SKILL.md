@@ -33,17 +33,14 @@ Review the current task as a handoff to another engineer. Independently test whe
    - Read [references/reviewer-contract.md](references/reviewer-contract.md) and use it as the canonical reviewer prompt.
    - Give the reviewer the repository path, factual task brief, acceptance criteria, included scope, exclusions, scoped-state identifier, and validation commands with factual outcomes.
    - Require independent repository inspection. The reviewer may rerun only checks that are safe for tracked and user-owned files.
-   - Discard a stale review. Only a completed review of the current state counts as a pass.
 
 4. **Triage the complete review before editing.**
    - Ask the same reviewer once to complete missing required output or explain an unclear understanding summary. If it still cannot, replace it with one fresh reviewer; if that review is also unusable, stop `incomplete`.
-   - Accept evidence-backed findings that affect requirements, comprehensibility, correctness, security, privacy, data integrity, UX, operations, architecture, local fit, or test evidence. Reject speculative refactors, optional hardening, and subjective polish.
-   - For a material disputed finding, read [references/adjudication.md](references/adjudication.md). Do not start another review pass of unchanged state merely to seek a different opinion.
+   - Accept evidence-backed findings within the contract's review scope. Reject speculative refactors, optional hardening, and subjective polish.
+   - For a material disputed finding, read [references/adjudication.md](references/adjudication.md).
 
 5. **Fix, validate, and repeat.**
-   - Resolve accepted findings as one coherent batch when safe, then rerun scoped validation and refresh the full task-owned scope.
-   - Any task-owned change requires a fresh reviewer. On unchanged state, continue only clarification, reconsideration, or focused adjudication with the appropriate existing or fresh agent.
-   - Stop polishing when remaining suggestions are non-actionable preferences.
+   - Resolve accepted findings as one coherent batch when safe, then rerun scoped validation, refresh the full task-owned scope, and start a fresh review pass per the stable-state invariant.
 
 ## Completion
 
@@ -63,6 +60,6 @@ Report:
 - status: `passed`, `no-changes`, `incomplete`, or `interrupted`, with the number of completed review passes;
 - what changed and how each finding was resolved, withdrawn, adjudicated invalid, or left unresolved;
 - validation commands and factual outcomes;
-- the latest score, if a current review pass completed, noting when it predates adjudication;
+- the latest score, if a current review pass completed;
 - test quality score and basis when tests changed;
 - blockers, residual risks, and follow-up work.
