@@ -1,7 +1,7 @@
 # loop-code-review-skill
 
 <p align="center">
-  <img src="assets/loop-code-review-cycle.png" alt="Fresh independent reviewers inspect, score, and improve each iteration" width="900">
+  <img src="assets/loop-code-review-cycle-v2.png" alt="Fresh independent review and fixes repeat until no actionable findings remain" width="900">
 </p>
 
 An agent skill that turns code review into a loop with a verifiable exit condition. Works in Claude Code, OpenAI Codex CLI, and any runtime that supports the [Agent Skills](https://agentskills.io) format.
@@ -12,7 +12,7 @@ The skill reviews the current task's active git changes — not the whole dirty 
 
 Review is framed as a handoff: the reviewer must reconstruct what the change does, its control flow, its invariants, and its failure behavior, and a specific comprehension obstacle becomes an actionable maintainability finding. Alongside that it checks correctness, security, data integrity, test evidence, reuse of established project solutions, and architecture fit.
 
-Each reviewer completes the whole scoped review and returns the full substantiated finding set before fixes begin. The loop resolves accepted findings as a coherent batch, validates the result, and repeats with a fresh reviewer after the task-owned files or hunks under review change. It finishes when validation is green, the reviewer demonstrates a credible understanding of the change, no unresolved actionable findings remain, and test evidence for changed behavior is trustworthy or concretely justified. The numeric score remains a visible progress signal but never creates work or controls acceptance.
+Each reviewer completes the whole scoped review and returns the full substantiated finding set before fixes begin. The loop resolves accepted findings as a coherent batch, validates the result, and repeats with a fresh reviewer after the task-owned files or hunks under review change. It finishes when validation is green, the reviewer demonstrates a credible understanding of the change, no unresolved actionable findings remain, and test evidence for changed behavior is trustworthy or concretely justified. Reviewers reply concisely, as to a colleague, with findings and supporting evidence in whatever structure makes them clear.
 
 ## Install
 
