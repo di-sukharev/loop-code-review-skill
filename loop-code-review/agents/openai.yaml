@@ -1,4 +1,4 @@
 interface:
   display_name: "Loop Code Review"
-  short_description: "Iterative independent review-and-fix loop"
-  default_prompt: "Use $loop-code-review to run the iterative independent review workflow on only this task's active changes."
+  short_description: "Fresh reviews for material systemic defects"
+  default_prompt: "Use $loop-code-review to find and fix material systemic defects in this task through fresh independent reviews."

@@ -1,47 +1,35 @@
 # loop-code-review-skill
 
-<p align="center">
-  <img src="assets/loop-code-review-cycle-v2.png" alt="Fresh independent review and fixes repeat until no actionable findings remain" width="900">
-</p>
+Fresh independent reviews and fixes until the task is sufficiently reliable for
+real use. Focuses on material systemic defects: broken core behavior, data integrity,
+access control, payments, and serious operational failures. Excludes speculative
+hardening and cosmetic work; browser checks require an explicit request.
 
-An agent skill that turns code review into a loop with a verifiable exit condition. Works in Claude Code, OpenAI Codex CLI, and any runtime that supports the [Agent Skills](https://agentskills.io) format.
-
-## [`loop-code-review`](loop-code-review/SKILL.md)
-
-The skill reviews the current task's active git changes — not the whole dirty worktree — through fresh independent reviewer agents that start without the orchestrator's conversation history and rediscover the facts from the repository themselves.
-
-Review is framed as a handoff: the reviewer must reconstruct what the change does, its control flow, its invariants, and its failure behavior, and a specific comprehension obstacle becomes an actionable maintainability finding. Alongside that it checks correctness, security, data integrity, test evidence, reuse of established project solutions, and architecture fit.
-
-Each reviewer completes the whole scoped review and returns the full substantiated finding set before fixes begin. The loop resolves accepted findings as a coherent batch, validates the result, and repeats with a fresh reviewer after the task-owned files or hunks under review change. It finishes when validation is green, the reviewer demonstrates a credible understanding of the change, no unresolved actionable findings remain, and test evidence for changed behavior is trustworthy or concretely justified. Reviewers reply concisely, as to a colleague, with findings and supporting evidence in whatever structure makes them clear.
+A reviewer examines the task's active changes and reports concrete findings. The
+lead evaluates them, then the same reviewer fixes accepted issues and checks the
+result. A fresh reviewer checks the updated changes. Reports stay short, passing
+checks are reused where applicable, and there is no fixed dispute procedure.
 
 ## Install
 
-Copy the skill directory into your agent's skills folder.
+Ask your agent:
 
-Claude Code:
-
-```sh
-git clone https://github.com/di-sukharev/loop-code-review-skill.git
-mkdir -p ~/.claude/skills
-cp -R loop-code-review-skill/loop-code-review ~/.claude/skills/
+```text
+Install this skill globally: https://github.com/di-sukharev/loop-code-review-skill
 ```
 
-Codex CLI:
-
-```sh
-git clone https://github.com/di-sukharev/loop-code-review-skill.git
-mkdir -p ~/.codex/skills
-cp -R loop-code-review-skill/loop-code-review ~/.codex/skills/
-```
-
-Codex also reads `~/.agents/skills` and, per project, `.agents/skills`; Claude Code also reads a project's `.claude/skills`. Copy into whichever scope you want the skill in, and copy again to update.
-
-Or hand the repository to your agent and ask it to install the skill into your skills directory — the layout is the standard one, so it can place the folder itself.
+Or copy `loop-code-review` into `~/.codex/skills/` for Codex or
+`~/.claude/skills/` for Claude Code. Requires a runtime with subagent support.
 
 ## Use
 
-- `/loop-code-review` in Claude Code, `$loop-code-review` in Codex.
-- Or just ask the agent to keep reviewing and fixing the current task's changes until an independent reviewer signs off.
+```text
+$loop-code-review
+```
+
+Use `/loop-code-review` in Claude Code. You can specify a reviewer model in your
+request. The skill preserves unrelated changes and does not authorize commits,
+pushes, or deployment.
 
 ## License
 
