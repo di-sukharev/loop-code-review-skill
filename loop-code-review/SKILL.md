@@ -26,8 +26,9 @@ Start a fresh reviewer without parent history or previous review conclusions
 (`fork_turns: "none"` in Codex). Honor any requested model through the spawning tool.
 Give it these review criteria, requirements, repository path, scoped changes, and
 available check results. Ask it to inspect the full scope and relevant surrounding code,
-then report only substantiated issues with location, impact, and evidence. No
-mandatory architecture retelling, report template, or agent-history reading.
+then report only substantiated issues with location, impact, and evidence.
+Do not require an architecture recap or a fixed report template. Do not read
+subagent histories.
 
 The reviewer reports before editing. Assess its findings, resolve uncertainty with
 focused inspection or follow-up, and ask that same reviewer to fix the issues you
