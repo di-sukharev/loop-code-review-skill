@@ -4,6 +4,8 @@ description: Review and fix material systemic defects in active task changes thr
 ---
 
 Review for sufficient reliability in real use with minimal time and token cost.
+Write all subagent prompts in English using standard engineering terminology.
+Keep user-facing communication in the user's language.
 Focus on material systemic defects introduced or worsened by this task: broken
 core behavior or requirements, data loss or corruption, meaningful access violations,
 incorrect payments, and serious operational failures. Weigh likelihood, impact, and
