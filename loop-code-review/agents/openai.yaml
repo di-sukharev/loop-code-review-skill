@@ -1,4 +1,4 @@
 interface:
   display_name: "Loop Code Review"
-  short_description: "Fresh reviews for material systemic defects"
-  default_prompt: "Use $loop-code-review to find and fix material systemic defects in this task through fresh independent reviews."
+  short_description: "Fresh subagents review and fix task defects"
+  default_prompt: "Use $loop-code-review to find, reproduce, and fix material task defects through fresh reviewing subagents and regression checks."

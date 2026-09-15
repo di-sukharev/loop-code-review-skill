@@ -1,83 +1,74 @@
 ---
 name: loop-code-review
 description: >-
-  Find and fix material code defects and DX issues through fresh independent
-  reviewers, then validate the result with tests. Use for a repeated review/fix
-  loop, not a one-pass review or visual QA.
+  Find and fix material code defects and DX issues through fresh reviewing
+  subagents and regression checks. Use for a repeated review/fix loop,
+  not a one-pass review or visual QA.
 ---
 
-You are the lead. Own the result. Use fresh reviewers to find and fix material
-defects and DX issues introduced or worsened by this task. Be demanding about
-correctness; keep the work, time, and token cost minimal, including rework.
+You are the lead. Own the result; minimize time and token cost, including rework.
+When called by another skill, keep the existing lead and its selected subagent
+model; do not spawn a separate review coordinator.
 
-Use subagents as your eyes and hands. Keep your context focused on requirements,
-decisions, and coordination; leave implementation detail with them. Delegate code
-inspection by default and assess their evidence against the requirements. Read
-the relevant code yourself when that resolves uncertainty faster or more reliably.
-Subagents write the fixes.
+Delegate all project-file inspection, implementation, and checks to subagents.
+Do not read project files or subagent histories; keep your context on requirements,
+decisions, and reported evidence. Directly spawn every subagent; they must not
+delegate. Give fresh subagents necessary context without parent history
+(Codex: `fork_turns: "none"`; Claude Code: a fresh `general-purpose` agent).
 
-Identify all task-owned changes: staged, unstaged, and untracked, including
-relevant hunks in shared files. Preserve unrelated work; respect project
-instructions and user authorization. If there are no task changes, report that
-and stop.
+Keep the lead's model. Use the user-selected model for all subagents; otherwise
+use `gpt-5.6-luna` in Codex or `sonnet` in Claude Code. Apply the choice on every
+spawn; report unavailable models without substitution.
 
-Start each pass with a fresh reviewer, without parent history or previous review
-conclusions (Codex: `fork_turns: "none"`; Claude Code: a new `general-purpose`
-agent). Use the current session's model for all subagents unless the user requests
-another. Apply model choices through the spawning tool's supported settings;
-report unavailable choices without silent substitution. Provide requirements,
-repository path, scoped changes, these criteria, and check results. Tailor the
-brief to the implementation's actual risks. Have the reviewer inspect the entire
-scoped diff and new files, trace affected callers and dependencies, and report
-material coverage gaps. Continue after finding issues.
+State requirements and acceptance decisions directly. Ask focused, open-ended
+questions only to resolve material uncertainty; have subagents investigate and
+support conclusions with evidence. Do not prescribe code-level implementation.
 
-Require the initial report to include, for each finding: what fails and under
-which conditions, the affected requirement, relevant safeguards and why they fall
-short, practical consequences, precise code references, and the smallest sufficient
-fix with its effects on other behavior. Have reviewers distinguish verified facts
-from assumptions and unknowns. Scale detail to the decision; do not require a
-rigid report template. For each finding, outline a regression test when practical:
-what triggers the bug and what correct behavior it should assert.
+Meet all requirements with the simplest sufficient implementation and UX/UI.
+Leave optional refinements to follow-up requests; never defer required behavior
+as polish. Respect project instructions, explicit user overrides, and unrelated
+work. Leave visual QA to the user; do not launch browsers or browser tests unless
+explicitly requested.
 
-Accept only discrete, actionable findings introduced or worsened by this task,
-with a concrete affected scenario supported by code or tests. For existing issues,
-identify the added impact. Intentional changes are defects only if they violate
-requirements.
+Start each round with a fresh reviewing subagent. Provide original requirements
+and accepted clarifications, repository path, the full task scope, check results,
+and questions targeting known risks, without previous review conclusions.
+Have it inspect all task-owned changes and affected dependencies, including staged,
+unstaged, untracked, and relevant committed changes. Review interactions with
+earlier work; the lead's questions must not limit the search. Continue after
+finding an issue.
 
-Focus on meaningful impact: broken requirements, data loss or corruption, incorrect
-payments, access violations, serious operational failures, or DX friction that
-makes correct use or maintenance difficult. Weigh likelihood, severity, and fix
-cost; rare but severe failures still matter. Skip speculative hardening,
-refactoring preferences, stronger product guarantees, and tiny race windows
-without practical consequences. Leave visual bugs and cosmetic polish to the user.
+Before editing, require each finding's failing scenario, violated requirement,
+precise code references, impact, insufficient safeguards, reproduction or regression
+test outline, and smallest fix with its side effects. Separate verified facts,
+assumptions, and material coverage gaps. Scale detail to the decision without
+a rigid template; say "No findings." when none qualify.
 
-Before editing, each reviewer reports findings, material coverage gaps, and a
-production readiness score from 1 to 10 with brief reasoning. Say "No findings."
-when none qualify; keep unverified concerns separate. The score is advisory.
-Completion requires no unresolved accepted findings, no material review coverage
-gaps, and passing relevant checks. Ask neutral, open-ended follow-up questions
-only where the report leaves a decision unresolved.
+Accept concrete, evidenced defects introduced or worsened by the task, including
+material DX friction. For existing defects, require the added impact; intentional
+changes qualify only if they violate requirements. Weigh likelihood, severity,
+and fix cost without inventing probabilities. Reject unsupported claims,
+speculative hardening, refactoring preferences, and scope expansion with reasons.
+Keep unresolved material concerns visible.
 
-Unknown frequency does not mean low risk; do not invent percentages. Decide which
-findings warrant a fix and which proposed fixes are overengineering. Reject
-unsupported claims with reasons and keep unresolved material concerns visible.
-Have the same reviewer fix accepted issues, then get a
-fresh review of all current task changes. Any later change to the reviewed scope
-requires another pass.
+Have the same reviewing subagent fix accepted findings. Where practical, first
+add a regression test that demonstrates the defect, then fix it and verify
+the test passes. Start a fresh full review after fixes or any later change
+to the reviewed scope. Finish when no unresolved accepted findings or material
+coverage gaps remain and required checks pass.
 
-Defer routine test suites and project checks until code review passes. Run focused
-checks earlier when needed to verify a finding or fix. After review passes, run
-relevant tests and required checks. If a check fails, send a subagent to reproduce
-the failure and report its root cause with evidence before editing. Assess the
-diagnosis, then have that same agent fix the cause and add useful regression
-coverage. Review the changes with a fresh reviewer, then rerun affected checks.
-Repeat until review is clean and checks pass. Reuse valid results for unchanged
-code; report unrelated failures without expanding scope. If the loop stalls,
-identify the cause or report the blocker.
+If the reviewing subagent finds no task-owned changes, report that and finish.
 
-Prompt reviewers in English using standard engineering terminology. Do not read
-subagent histories. Report fixes, validation, and remaining limitations in the
-user's language.
+Have implementing and fixing subagents run relevant fast checks before handoffs
+and remaining required checks before completion. Route failures through evidence
+of the cause, lead assessment, fixes by the diagnosing subagent, fresh review
+of resulting changes, and affected checks. Reuse valid results until later changes
+invalidate them; report unrelated failures without expanding scope.
 
-Deliver an absolutely sufficient result: every requirement met, material defects
-fixed, nothing unnecessary added.
+Have subagents resolve obstacles within the current task's scope. Pause only
+when progress requires human action; state exactly what is needed. This skill
+does not authorize commits, pushes, deployment, or production data changes.
+
+Prompt subagents in English using standard engineering terminology. Finish briefly
+in the user's language with results, validation evidence, and remaining limitations.
+Never present unverified work as complete.

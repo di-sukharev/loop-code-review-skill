@@ -1,21 +1,26 @@
 # loop-code-review-skill
 
 Find and fix material defects and DX issues introduced or worsened by the task.
-Focus on correctness, data integrity, access, payments, and serious operational failures.
-Skip speculative hardening and cosmetics; visual QA stays with the user.
+Meet requirements without speculative hardening or cosmetic polish; visual QA
+stays with the user.
 
-Each fresh reviewer checks all scoped changes and reports actionable evidence,
-material coverage gaps, and an advisory production readiness score of 1–10. The
-lead assesses reports, asks open questions, and reads code when faster or more
-reliable. The same reviewer fixes accepted findings; a new reviewer checks all
-updated task changes.
+The lead delegates project-file inspection and checks, assessing reported evidence
+without reading project files or subagent histories. It directly spawns each
+reviewing subagent; there is no nested delegation or separate review coordinator.
 
-Routine suites and required checks follow review; focused checks may run earlier.
-On failure: root cause with evidence → lead assessment → fix by the same subagent
-→ fresh review → retry affected checks. Done means no unresolved accepted findings,
-no material review coverage gaps, and passing checks.
+Each fresh reviewing subagent receives original requirements and accepted
+clarifications, all task-owned changes, check results, and risk-focused questions.
+It inspects the full scope and affected dependencies, including relevant committed
+changes, without previous review conclusions. Findings explain failing scenarios,
+evidence, impact, reproduction or regression tests, and minimal fixes.
 
-Full workflow and report criteria: [SKILL.md](loop-code-review/SKILL.md).
+The lead asks open-ended questions only where material uncertainty remains.
+The same reviewing subagent fixes accepted findings and verifies them; a fresh
+subagent reviews all updated changes. Fast checks run before handoffs, remaining
+required checks before completion. Done means no unresolved accepted findings
+or material coverage gaps and passing checks. Pause only for needed human action.
+
+Full workflow: [SKILL.md](loop-code-review/SKILL.md).
 
 ## Install
 
@@ -26,7 +31,7 @@ Install this skill globally: https://github.com/di-sukharev/loop-code-review-ski
 ```
 
 Or copy `loop-code-review` into `~/.codex/skills/` for Codex or
-`~/.claude/skills/` for Claude Code. Requires a runtime with subagent support.
+`~/.claude/skills/` for Claude Code. Requires subagent support.
 
 ## Use
 
@@ -34,8 +39,12 @@ Or copy `loop-code-review` into `~/.codex/skills/` for Codex or
 $loop-code-review
 ```
 
-Use `/loop-code-review` in Claude Code. Subagents use the current session's model
-unless you request another. The skill preserves unrelated changes and does not
-authorize commits, pushes, or deployment.
+Use `/loop-code-review` in Claude Code. Keep the lead's model; select one model
+for all subagents in natural language. Defaults: `gpt-5.6-luna` in Codex,
+`sonnet` in Claude Code. When called by another skill, preserve its selected
+subagent model and existing lead. Unavailable models are not silently substituted.
+
+The skill preserves unrelated work and does not authorize commits, pushes,
+deployment, or production data changes.
 
 License: [MIT](LICENSE).
