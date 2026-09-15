@@ -26,7 +26,10 @@ Give fresh subagents task context without parent history
   Subagents work from code and check results. The user checks the visuals.
 - Subagents run useful checks and those required by the project. Skip unrelated
   or redundant checks; reuse valid results. Fix task-caused failures, report unrelated ones.
-- Respect project instructions, user overrides, and unrelated work.
+- Respect project instructions and user overrides. Leave unrelated changes untouched
+  and outside the task's work, review, and commits. Continue on the current branch
+  unless instructed otherwise.
+- Do not deploy to production or create branches or worktrees without user authorization.
 
 If another skill calls this one, you run the review yourself with its selected
 subagent model. Do not spawn a separate coordinator.
@@ -61,8 +64,7 @@ If the reviewing subagent finds no task changes, report that and finish.
 ## Finish
 
 Resolve obstacles inside the current task. Pause only when human action is needed;
-say what is needed. This skill does not authorize commits, pushes, deployment,
-or production changes. Brief subagents in English. Finish in the user's language
+say what is needed. Brief subagents in English. Finish in the user's language
 with fixes, checks, and remaining issues.
 
 You own quality and delivery time. Work like a spec-ops team lead:
