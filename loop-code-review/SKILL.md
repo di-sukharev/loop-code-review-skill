@@ -1,46 +1,83 @@
 ---
 name: loop-code-review
-description: Review and fix material systemic defects in active task changes through fresh independent reviewers. Use for a repeated review/fix loop, not a one-pass review or visual QA.
+description: >-
+  Find and fix material code defects and DX issues through fresh independent
+  reviewers, then validate the result with tests. Use for a repeated review/fix
+  loop, not a one-pass review or visual QA.
 ---
 
-Review for sufficient reliability in real use with minimal time and token cost.
-Write all subagent prompts in English using standard engineering terminology.
-Keep user-facing communication in the user's language.
-Focus on material systemic defects introduced or worsened by this task: broken
-core behavior or requirements, data loss or corruption, meaningful access violations,
-incorrect payments, and serious operational failures. Weigh likelihood, impact, and
-fix cost together. Require a concrete scenario and meaningful consequences.
-Do not invent stronger product guarantees or report speculative hardening,
-refactoring preferences, or tiny race windows without a convincing practical risk.
-Rare but severe failures still matter.
+You are the lead. Own the result. Use fresh reviewers to find and fix material
+defects and DX issues introduced or worsened by this task. Be demanding about
+correctness; keep the work, time, and token cost minimal, including rework.
 
-Leave visual bugs, styling, and cosmetic polish to the user's browser review.
-Do not launch a browser or run browser tests unless explicitly requested.
+Use subagents as your eyes and hands. Keep your context focused on requirements,
+decisions, and coordination; leave implementation detail with them. Delegate code
+inspection by default and assess their evidence against the requirements. Read
+the relevant code yourself when that resolves uncertainty faster or more reliably.
+Subagents write the fixes.
 
-Identify the task-owned staged, unstaged, and untracked changes, including relevant
-hunks in shared files. Preserve unrelated work and respect project instructions
-and user authorization; this skill does not authorize Git publication or deployment.
-If there are no task changes, report that and stop.
+Identify all task-owned changes: staged, unstaged, and untracked, including
+relevant hunks in shared files. Preserve unrelated work; respect project
+instructions and user authorization. If there are no task changes, report that
+and stop.
 
-Start a fresh reviewer without parent history or previous review conclusions
-(`fork_turns: "none"` in Codex). Honor any requested model through the spawning tool.
-Give it these review criteria, requirements, repository path, scoped changes, and
-available check results. Ask it to inspect the full scope and relevant surrounding code,
-then report only substantiated issues with location, impact, and evidence.
-Do not require an architecture recap or a fixed report template. Do not read
-subagent histories.
+Start each pass with a fresh reviewer, without parent history or previous review
+conclusions (Codex: `fork_turns: "none"`; Claude Code: a new `general-purpose`
+agent). Use the current session's model for all subagents unless the user requests
+another. Apply model choices through the spawning tool's supported settings;
+report unavailable choices without silent substitution. Provide requirements,
+repository path, scoped changes, these criteria, and check results. Tailor the
+brief to the implementation's actual risks. Have the reviewer inspect the entire
+scoped diff and new files, trace affected callers and dependencies, and report
+material coverage gaps. Continue after finding issues.
 
-The reviewer reports before editing. Assess its findings, resolve uncertainty with
-focused inspection or follow-up, and ask that same reviewer to fix the issues you
-agree with and verify them. Reject unsupported findings with evidence; leave real
-unresolved concerns visible. Choose the simplest useful way to resolve disputes.
-After fixes, start another fresh reviewer for all current task changes. A review
-cannot clear relevant changes made after it inspected them.
+Require the initial report to include, for each finding: what fails and under
+which conditions, the affected requirement, relevant safeguards and why they fall
+short, practical consequences, precise code references, and the smallest sufficient
+fix with its effects on other behavior. Have reviewers distinguish verified facts
+from assumptions and unknowns. Scale detail to the decision; do not require a
+rigid report template. For each finding, outline a regression test when practical:
+what triggers the bug and what correct behavior it should assert.
 
-Use the smallest meaningful checks and regression coverage for the behavior at risk.
-Reuse passing evidence for unchanged code; rerun affected checks after fixes. Report
-unrelated failures without expanding the task. Finish when a fresh review finds no
-remaining material issues and relevant checks support the result. Do not present
-blocked or unverified behavior as passing. If the loop stalls, reconsider the cause
-or report the blocker instead of repeating it indefinitely. Briefly report the
-result, fixes, checks, and any remaining limitations.
+Accept only discrete, actionable findings introduced or worsened by this task,
+with a concrete affected scenario supported by code or tests. For existing issues,
+identify the added impact. Intentional changes are defects only if they violate
+requirements.
+
+Focus on meaningful impact: broken requirements, data loss or corruption, incorrect
+payments, access violations, serious operational failures, or DX friction that
+makes correct use or maintenance difficult. Weigh likelihood, severity, and fix
+cost; rare but severe failures still matter. Skip speculative hardening,
+refactoring preferences, stronger product guarantees, and tiny race windows
+without practical consequences. Leave visual bugs and cosmetic polish to the user.
+
+Before editing, each reviewer reports findings, material coverage gaps, and a
+production readiness score from 1 to 10 with brief reasoning. Say "No findings."
+when none qualify; keep unverified concerns separate. The score is advisory.
+Completion requires no unresolved accepted findings, no material review coverage
+gaps, and passing relevant checks. Ask neutral, open-ended follow-up questions
+only where the report leaves a decision unresolved.
+
+Unknown frequency does not mean low risk; do not invent percentages. Decide which
+findings warrant a fix and which proposed fixes are overengineering. Reject
+unsupported claims with reasons and keep unresolved material concerns visible.
+Have the same reviewer fix accepted issues, then get a
+fresh review of all current task changes. Any later change to the reviewed scope
+requires another pass.
+
+Defer routine test suites and project checks until code review passes. Run focused
+checks earlier when needed to verify a finding or fix. After review passes, run
+relevant tests and required checks. If a check fails, send a subagent to reproduce
+the failure and report its root cause with evidence before editing. Assess the
+diagnosis, then have that same agent fix the cause and add useful regression
+coverage. Review the changes with a fresh reviewer, then rerun affected checks.
+Repeat until review is clean and checks pass. Reuse valid results for unchanged
+code; report unrelated failures without expanding scope. If the loop stalls,
+identify the cause or report the blocker.
+
+Prompt reviewers in English using standard engineering terminology. Do not read
+subagent histories. Report fixes, validation, and remaining limitations in the
+user's language.
+
+Deliver an absolutely sufficient result: every requirement met, material defects
+fixed, nothing unnecessary added.
