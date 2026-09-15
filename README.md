@@ -3,6 +3,8 @@
 Fix material defects and DX issues introduced or worsened by a task:
 fresh reviewing subagent → evidenced findings → lead assessment →
 fixes by the same subagent → fresh full review.
+Keep UX thoughtful, simple, and elegant, and UI minimal: no unnecessary clicks,
+modals, or controls.
 
 The lead directly coordinates subagents without reading project files or their
 histories; open-ended questions resolve material uncertainty only. Each round
@@ -14,8 +16,9 @@ impact, reproduction/tests, and minimal fixes.
 Before handoffs, run checks useful for the changes and those required by the project;
 skip unrelated or redundant checks. Finish with accepted findings and material
 coverage gaps resolved and applicable checks passing. Pause only for human action.
-Preserve unrelated work; skip speculative hardening and cosmetics. Visual QA stays
-with the user. No authorization for commits, pushes, deployment, or production
+Preserve unrelated work; skip speculative hardening and cosmetics. Subagents work
+from code; they do not open browsers or click through the app for visual inspection.
+The user checks the visuals. No authorization for commits, pushes, deployment, or production
 data changes. [Full protocol](loop-code-review/SKILL.md).
 
 ## Install and use
@@ -31,7 +34,7 @@ Requires subagents.
 
 Run `$loop-code-review` in Codex or `/loop-code-review` in Claude Code.
 Choose one subagent model in natural language; defaults: `gpt-5.6-luna` in Codex,
-`sonnet` in Claude Code. Keep the lead's model and, when called by another skill,
-its lead and selected subagent model. No silent model substitution.
+`sonnet` in Claude Code. When called by another skill, use its selected subagent
+model; the calling agent coordinates the review. No silent model substitution.
 
 [MIT](LICENSE).
