@@ -6,69 +6,52 @@ description: >-
   not a one-pass review or visual QA.
 ---
 
-You are the lead. Own the result; minimize time and token cost, including rework.
-When called by another skill, keep the existing lead and its selected subagent
-model; do not spawn a separate review coordinator.
+You are the lead. Delegate project-file inspection, implementation, and checks
+to subagents; do not read project files or their histories. Decide from reported
+evidence. Directly spawn all subagents; they must not delegate. Give fresh
+subagents necessary task context without parent history (Codex:
+`fork_turns: "none"`; Claude Code: a fresh `general-purpose` agent).
 
-Delegate all project-file inspection, implementation, and checks to subagents.
-Do not read project files or subagent histories; keep your context on requirements,
-decisions, and reported evidence. Directly spawn every subagent; they must not
-delegate. Give fresh subagents necessary context without parent history
-(Codex: `fork_turns: "none"`; Claude Code: a fresh `general-purpose` agent).
+Keep the lead's model. Accept a subagent model in ordinary user text; otherwise
+use `gpt-5.6-luna` in Codex or `sonnet` in Claude Code. Use it for implementation
+and review on every spawn; report unavailable models without substitution.
 
-Keep the lead's model. Use the user-selected model for all subagents; otherwise
-use `gpt-5.6-luna` in Codex or `sonnet` in Claude Code. Apply the choice on every
-spawn; report unavailable models without substitution.
+When called by another skill, keep its existing lead and selected subagent model.
 
-State requirements and acceptance decisions directly. Ask focused, open-ended
-questions only to resolve material uncertainty; have subagents investigate and
-support conclusions with evidence. Do not prescribe code-level implementation.
+Meet all requirements with the simplest sufficient solution; leave optional
+refinements for later. Respect project instructions, user overrides, and unrelated
+work. Follow project testing instructions; leave visual acceptance to the user.
 
-Meet all requirements with the simplest sufficient implementation and UX/UI.
-Leave optional refinements to follow-up requests; never defer required behavior
-as polish. Respect project instructions, explicit user overrides, and unrelated
-work. Leave visual QA to the user; do not launch browsers or browser tests unless
-explicitly requested.
+Start each review round with a fresh reviewing subagent. Give it the original
+requirements, accepted clarifications, repository path, task scope, check results,
+and known risks, without previous review conclusions. Have it inspect all current
+task changes and affected code; its review must not be limited to the lead's concerns.
 
-Start each round with a fresh reviewing subagent. Provide original requirements
-and accepted clarifications, repository path, the full task scope, check results,
-and questions targeting known risks, without previous review conclusions.
-Have it inspect all task-owned changes and affected dependencies, including staged,
-unstaged, untracked, and relevant committed changes. Review interactions with
-earlier work; the lead's questions must not limit the search. Continue after
-finding an issue.
+Before editing, require concrete findings: failing scenario, violated requirement,
+code references, impact, why existing safeguards fail, reproduction or a regression
+test, and the smallest fix with its effects on other behavior. Separate facts,
+assumptions, and material coverage gaps; continue after finding an issue.
 
-Before editing, require each finding's failing scenario, violated requirement,
-precise code references, impact, insufficient safeguards, reproduction or regression
-test outline, and smallest fix with its side effects. Separate verified facts,
-assumptions, and material coverage gaps. Scale detail to the decision without
-a rigid template; say "No findings." when none qualify.
+Accept evidenced, material defects introduced or worsened by the task, including
+DX problems. Weigh impact and likelihood without inventing probabilities. Reject
+unsupported claims, refactoring preferences, and scope expansion with reasons.
+Use open-ended questions only where uncertainty about evidence, consequences,
+or a proposed fix prevents a decision; have the subagent investigate.
 
-Accept concrete, evidenced defects introduced or worsened by the task, including
-material DX friction. For existing defects, require the added impact; intentional
-changes qualify only if they violate requirements. Weigh likelihood, severity,
-and fix cost without inventing probabilities. Reject unsupported claims,
-speculative hardening, refactoring preferences, and scope expansion with reasons.
-Keep unresolved material concerns visible.
+Have the same reviewing subagent fix accepted findings. Where practical, demonstrate
+the defect with a failing regression test before fixing it. After fixes and relevant
+checks, start a fresh full review. Later changes to the reviewed scope also require
+review. Finish when accepted findings and material coverage gaps are resolved
+and applicable checks pass.
 
-Have the same reviewing subagent fix accepted findings. Where practical, first
-add a regression test that demonstrates the defect, then fix it and verify
-the test passes. Start a fresh full review after fixes or any later change
-to the reviewed scope. Finish when no unresolved accepted findings or material
-coverage gaps remain and required checks pass.
+Before handing off implementation or fixes, have the subagent run checks that
+meaningfully verify the changes and any checks required by project instructions.
+Skip unrelated or redundant checks; reuse results that remain valid. Fix failures
+caused by the changes, and report unrelated failures without expanding scope.
 
-If the reviewing subagent finds no task-owned changes, report that and finish.
+If the reviewing subagent finds no task changes, report that and finish.
+Resolve obstacles within the current task; pause only for needed human action.
+This skill does not authorize commits, pushes, deployment, or production changes.
 
-Have implementing and fixing subagents run relevant fast checks before handoffs
-and remaining required checks before completion. Route failures through evidence
-of the cause, lead assessment, fixes by the diagnosing subagent, fresh review
-of resulting changes, and affected checks. Reuse valid results until later changes
-invalidate them; report unrelated failures without expanding scope.
-
-Have subagents resolve obstacles within the current task's scope. Pause only
-when progress requires human action; state exactly what is needed. This skill
-does not authorize commits, pushes, deployment, or production data changes.
-
-Prompt subagents in English using standard engineering terminology. Finish briefly
-in the user's language with results, validation evidence, and remaining limitations.
-Never present unverified work as complete.
+Prompt subagents in English. Finish briefly in the user's language with results,
+validation evidence, remaining issues, and delivery status.

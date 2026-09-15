@@ -7,12 +7,13 @@ fixes by the same subagent → fresh full review.
 The lead directly coordinates subagents without reading project files or their
 histories; open-ended questions resolve material uncertainty only. Each round
 uses original requirements, accepted clarifications, check results, and known risks,
-not previous review conclusions. Review all task changes and affected dependencies,
-including relevant committed changes. Findings cover failing scenarios, evidence,
+not previous review conclusions. Review current task changes and affected code.
+Findings cover failing scenarios, evidence,
 impact, reproduction/tests, and minimal fixes.
 
-Fast checks precede handoffs. Finish with accepted findings and material coverage
-gaps resolved and required checks passing. Pause only for human action.
+Before handoffs, run checks useful for the changes and those required by the project;
+skip unrelated or redundant checks. Finish with accepted findings and material
+coverage gaps resolved and applicable checks passing. Pause only for human action.
 Preserve unrelated work; skip speculative hardening and cosmetics. Visual QA stays
 with the user. No authorization for commits, pushes, deployment, or production
 data changes. [Full protocol](loop-code-review/SKILL.md).
