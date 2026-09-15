@@ -7,8 +7,9 @@ Keep UX thoughtful, simple, and elegant, and UI minimal: no unnecessary clicks,
 modals, or controls.
 
 The lead directly coordinates subagents without reading project files or their
-histories; open-ended questions resolve material uncertainty only. Each round
-uses original requirements, accepted clarifications, check results, and known risks,
+histories; open-ended questions resolve material uncertainty only.
+The lead owns quality and delivery time. Each step advances the task or resolves
+uncertainty. Each round uses original requirements, accepted clarifications, check results, and known risks,
 not previous review conclusions. Review current task changes and affected code.
 Findings cover failing scenarios, evidence,
 impact, reproduction/tests, and minimal fixes.
