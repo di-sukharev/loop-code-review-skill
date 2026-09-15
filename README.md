@@ -1,31 +1,21 @@
 # loop-code-review-skill
 
-Fresh independent reviews of code, meaningful DX issues, and realistic edge cases,
-followed by tests. Focuses on broken requirements, data integrity, access control,
-payments, serious operational failures, and friction that makes correct use or
-maintenance difficult. Excludes speculative hardening and cosmetic work; visual
-QA stays with the user.
+Find and fix material defects and DX issues introduced or worsened by the task.
+Focus on correctness, data integrity, access, payments, and serious operational failures.
+Skip speculative hardening and cosmetics; visual QA stays with the user.
 
-A reviewer inspects the entire scoped diff and new files, then reports concrete
-findings, material coverage gaps, and a production readiness score from 1 to 10
-as guidance for the lead. Findings must be actionable, supported by code or tests,
-and introduced or worsened by the task. The lead decides which findings warrant a
-fix and which proposed fixes are overengineering. The same reviewer fixes accepted
-issues, and a fresh reviewer checks all updated task changes.
-Reports include failure conditions, evidence, existing safeguards, impact, and a
-minimal fix with its effects. For each finding, reviewers outline a regression
-test when practical: what triggers the bug and the expected behavior.
+Each fresh reviewer checks all scoped changes and reports actionable evidence,
+material coverage gaps, and an advisory production readiness score of 1–10. The
+lead assesses reports, asks open questions, and reads code when faster or more
+reliable. The same reviewer fixes accepted findings; a new reviewer checks all
+updated task changes.
 
-The lead keeps its context for decisions and coordination, asking neutral,
-open-ended questions where a decision remains unresolved and reading code when
-that is faster or more reliable.
+Routine suites and required checks follow review; focused checks may run earlier.
+On failure: root cause with evidence → lead assessment → fix by the same subagent
+→ fresh review → retry affected checks. Done means no unresolved accepted findings,
+no material review coverage gaps, and passing checks.
 
-Focused checks can run during review to verify findings or fixes; routine suites
-and required project checks run after review passes. On failure, a subagent
-reports the root cause with evidence before editing; after the lead agrees, that
-same agent fixes it. Review the changes and retry affected checks until both pass.
-Completion requires no unresolved accepted findings, no material review coverage
-gaps, and passing relevant checks.
+Full workflow and report criteria: [SKILL.md](loop-code-review/SKILL.md).
 
 ## Install
 
@@ -48,6 +38,4 @@ Use `/loop-code-review` in Claude Code. Subagents use the current session's mode
 unless you request another. The skill preserves unrelated changes and does not
 authorize commits, pushes, or deployment.
 
-## License
-
-[MIT](LICENSE)
+License: [MIT](LICENSE).
