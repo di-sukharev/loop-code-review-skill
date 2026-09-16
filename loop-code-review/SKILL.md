@@ -48,6 +48,8 @@ subagent model. Do not spawn a separate coordinator.
    and important gaps in the review.
 3. You judge the findings without reading code. Accept concrete problems supported by evidence.
    Reject unsupported claims, personal preferences, and scope expansion with reasons.
+   Avoid overengineering during review: do not complicate a sufficient implementation
+   for hypothetical edge cases without evidence of a realistic failure scenario.
    Weigh impact and likelihood without inventing probabilities.
    Ask open-ended questions only if uncertainty about the evidence, consequences,
    or proposed fix prevents a decision. The same subagent investigates.
