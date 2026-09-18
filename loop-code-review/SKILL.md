@@ -97,8 +97,9 @@ Do not create branches or worktrees without user authorization.
    - The impact.
    - Why the existing safeguards do not prevent the problem.
    - A reproduction procedure or a regression test.
-   - The smallest fix.
-   - The effects of the fix.
+   - The root cause and evidence for it.
+   - The simplest fix that resolves the root cause across the affected code.
+   - The effects of the fix on related behavior.
 
    The reviewer separates facts from assumptions.
    The reviewer reports important gaps in the review.
