@@ -13,6 +13,9 @@ uncertainty. Each round uses original requirements, accepted clarifications, che
 not previous review conclusions. Review current task changes and affected code.
 Findings cover failing scenarios, evidence,
 impact, reproduction/tests, and minimal fixes.
+Each reviewer gives the task changes a production readiness score from 1 to 10
+with a brief explanation. The score is advisory. The final report includes the
+latest review score and its explanation.
 
 Before handoffs, run checks useful for the changes and those required by the project;
 skip unrelated or redundant checks. Finish with accepted findings and material

@@ -102,6 +102,9 @@ Do not create branches or worktrees without user authorization.
 
    The reviewer separates facts from assumptions.
    The reviewer reports important gaps in the review.
+   The reviewer gives the task changes a production readiness score from 1 to 10.
+   The reviewer briefly explains the score.
+   The score is advisory.
 
 3. Assess the findings without reading code.
    Accept concrete problems supported by evidence.
@@ -138,6 +141,7 @@ If you pause, state the human action that is necessary.
 Give instructions to subagents in English.
 Write the final report in the user's language.
 Include fixes, check results, and remaining issues.
+If a review is complete, include its latest score and brief explanation.
 
 Use the fewest steps needed to complete the task.
 Each step must advance the task or resolve a real uncertainty.
