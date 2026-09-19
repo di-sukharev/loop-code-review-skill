@@ -25,15 +25,15 @@ A new reviewer is a new subagent.
 
 ## Subagent setup
 
-Use the user's selected model for every subagent.
-If no model is selected, use the default for the current tool:
+Before each launch, honor explicit model/effort choices (user > calling skill); choose unspecified settings autonomously.
+Use the cheapest reliable combination: lightweight/low for simple local work, more capable/medium for interacting parts or uncertainty, strong/high for complex or high-impact work; go higher only when needed.
+Reassess each round against the full review scope and likely fixes, considering dependencies, uncertainty, and impact—not just the latest diff.
+Escalate within explicit constraints when gaps or repeated failed fixes show the choice is insufficient.
 
-- Codex: `gpt-5.6-luna`.
-- Claude Code: `sonnet`.
-
-Set the selected model each time you start a subagent.
-If the selected model is unavailable, report this to the user.
-Do not use another model.
+Select supported model/effort combinations from current tool/environment metadata or discovery, not a fixed list.
+For unavailable automatic choices, pick a suitable alternative; if availability is unknown, use tool defaults.
+Report unavailable explicit choices without substituting.
+At launch, pass model/effort where configurable and briefly state both with the task-specific reason.
 
 Give each new subagent the task context without the parent history.
 
@@ -41,7 +41,6 @@ Give each new subagent the task context without the parent history.
 - In Claude Code, start a new `general-purpose` agent.
 
 If another skill calls this skill, coordinate the review yourself.
-Use the subagent model selected by that skill.
 Do not start a separate coordinator.
 
 ## Rules
