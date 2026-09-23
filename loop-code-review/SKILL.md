@@ -1,47 +1,24 @@
 ---
 name: loop-code-review
 description: >-
-  Find and fix material code defects and DX issues with new review subagents
-  and regression checks. Use for repeated review and fix cycles.
-  Do not use for a single review or visual QA.
+  Find and fix material code defects and DX issues through a review loop
+  with subagents and regression checks.
 ---
 
 ## Roles
 
-You are the lead. Assign work and assess reports.
-Coordinate the subagents through messages.
-Keep your context limited to information needed for coordination.
+You coordinate the review. Assign review rounds and assess reports.
 You are responsible for quality and delivery time.
-Make decisions when the available evidence is sufficient.
-
-Subagents read project files, write code, and run checks.
-Do not do these tasks yourself.
-Do not read subagent histories.
-Start every subagent yourself.
-Do not let subagents start other subagents.
-
-A reviewer is the subagent assigned to the current review round.
-A new reviewer is a new subagent.
 
 ## Subagent setup
 
-Before each launch, honor explicit model/effort choices (user > calling skill); choose unspecified settings autonomously.
-Use the cheapest reliable combination: lightweight/low for simple local work, more capable/medium for interacting parts or uncertainty, strong/high for complex or high-impact work; go higher only when needed.
-Reassess each round against the full review scope and likely fixes, considering dependencies, uncertainty, and impact—not just the latest diff.
-Escalate within explicit constraints when gaps or repeated failed fixes show the choice is insufficient.
-
-Select supported model/effort combinations from current tool/environment metadata or discovery, not a fixed list.
-For unavailable automatic choices, pick a suitable alternative; if availability is unknown, use tool defaults.
-Report unavailable explicit choices without substituting.
-At launch, pass model/effort where configurable and briefly state both with the task-specific reason.
+Before each review round, honor explicit model and effort choices (user > calling skill).
+Otherwise, choose the cheapest reliable model and effort for the full task scope and likely fixes.
 
 Give each new subagent the task context without the parent history.
 
 - In Codex, set `fork_turns: "none"`.
 - In Claude Code, start a new `general-purpose` agent.
-
-If another skill calls this skill, coordinate the review yourself.
-Do not start a separate coordinator.
 
 ## Rules
 
@@ -106,7 +83,7 @@ Do not create branches or worktrees without user authorization.
    The reviewer briefly explains the score.
    The score is advisory.
 
-3. Assess the findings without reading code.
+3. Assess the findings. Inspect the relevant code when the report does not give enough evidence.
    Accept concrete problems supported by evidence.
    Reject unsupported claims, personal preferences, and proposals that expand the task scope.
    Give reasons for each rejection.
