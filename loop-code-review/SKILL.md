@@ -22,7 +22,7 @@ description: >-
 A reviewer is a new agent for one round. It reviews the assigned changes and then fixes the accepted findings.
 
 Use the risk from the calling skill. Otherwise, choose the risk.
-High risk: migrations, data, security, concurrency, public contracts, or failures across components. Other changes have normal risk.
+High risk: migrations, persisted data, security, concurrency, contracts that external code uses, or unclear failures across components. Other changes have normal risk.
 
 | Risk | Claude Code | Codex |
 | --- | --- | --- |
@@ -72,7 +72,7 @@ Also report important review gaps and a readiness score from 1 to 10 with one re
 2. Assess the findings. Treat an important review gap as a finding. Accept material problems with evidence. Reject the other findings with a reason. If the evidence is not sufficient, read the code or ask the same reviewer. If you accept no findings, go to step 5.
 3. Tell the same reviewer to fix the accepted findings and run the relevant checks.
 4. Choose the next round:
-   - If no code changed, go to step 5.
+   - If no production code changed, go to step 5.
    - Normal risk: if all fixes are trivial, go to step 5. Otherwise, start a delta round with a new reviewer.
    - High risk: start a full round with a new reviewer.
    - A fix is trivial if it is local, has a regression test, and changes no contract or shared code.
