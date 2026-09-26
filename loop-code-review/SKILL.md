@@ -31,7 +31,8 @@ High risk: migrations, persisted data, security, concurrency, contracts that ext
 
 - Claude Code: if no agent type matches the chosen effort, use the nearest type and tell the user. If these agent types are missing, use `general-purpose` and tell the user that the reviewer inherits the session effort.
 - Codex: set `fork_turns: "none"`. Use the longest `wait` timeout.
-- If checks fail after two fix attempts, stop that reviewer. Give a new agent one step higher the accepted findings, changed ranges, and check results. The new agent only fixes. This is not a new round. The steps are `medium`, `high`, and a stronger model.
+- Claude Code, if you run as a subagent: start every agent in the foreground. Do not continue an agent with `SendMessage`, because its report does not return to you. Where this skill says "the same reviewer", start a new foreground agent with the same settings. Send it the brief, the assigned changes, and the finding with your question, the accepted findings, or the failed checks. This agent only answers or only fixes.
+- If checks fail after two fix attempts, stop that reviewer. Give a new agent one step higher the brief, the accepted findings, changed ranges, and check results. The new agent only fixes. This is not a new round. The steps are `medium`, `high`, and a stronger model.
 
 ## Brief
 
@@ -85,6 +86,6 @@ If there are no task changes, report this and finish.
 ## Finish
 
 Report the status. The status is passed if all applicable checks pass and no accepted finding is unfixed. Otherwise, the status is open.
-Report the fixes, checks, remaining issues, and the last score.
+Report the fixes, rejected findings with reasons, checks, remaining issues, and the last score.
 Report the cost: rounds, models, efforts, and subagent tokens if the runtime reports them.
 Pause only if a human action is necessary. State the action.
