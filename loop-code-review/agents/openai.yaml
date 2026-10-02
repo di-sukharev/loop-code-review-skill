@@ -1,4 +1,4 @@
 interface:
   display_name: "Loop Code Review"
-  short_description: "Risk-based review rounds that fix material defects"
-  default_prompt: "Use $loop-code-review to find and fix material task defects through risk-based review rounds with fresh reviewers and regression checks."
+  short_description: "A fresh reviewer fixes the code before release"
+  default_prompt: "Use $loop-code-review to review and fix this task's changes before release."
