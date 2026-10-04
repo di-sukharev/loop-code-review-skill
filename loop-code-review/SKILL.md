@@ -60,7 +60,7 @@ Do not add earlier review conclusions or the implementer's reasoning.
 
 The status is passed if all applicable checks pass and no accepted finding is unfixed. At high risk, each fix to production code also needs a re-review. Otherwise, the status is open.
 Report the status, fixes, rejected findings with reasons, checks, human checks, unresolved issues, and the last score.
-Also report the cost: rounds, models, efforts, and agent tokens if known.
+Also report the cost: rounds, models, and efforts.
 Pause only for a necessary human action, and name it. Human checks do not pause the work or change the status.
 
 ## Reviewer brief
