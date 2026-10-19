@@ -16,7 +16,7 @@ Default to staged and unstaged Git changes and untracked files unless another sc
 Give it the repository path, requirements, Definition of Done (DoD), and review criteria below.
 
 Choose among available models and effort levels. Follow the user's choices.
-Use the most capable model and high effort for high-risk changes.
+Use the most capable model (Opus or Sol) and high effort for high-risk changes.
 These include stored data, migrations, security, concurrency, external contracts, and failures across components.
 Use a capable general model and medium effort for other changes.
 
