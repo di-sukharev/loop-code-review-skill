@@ -1,7 +1,7 @@
 ---
 name: loop-code-review
 description: >-
-  Fresh reviewer sub-agents find and fix material problems in code changes through independent review rounds. Aim for an implementation that is correct and elegant DX-wise. Use this skill before committing changes.
+  Fresh reviewer sub-agents find and fix material problems in code changes through independent review rounds. Verify task fulfillment and find material bugs, regressions, and risks. Use this skill before committing changes.
 ---
 
 Follow project rules. Use English with the sub-agents and the user's language with the user.
@@ -20,9 +20,9 @@ Follow the user's model and effort choices. Otherwise, choose by risk:
 
 ## Review loop
 
-1. Ask the reviewer to inspect the changes and affected code, then report without changing code. Each finding must include a location, a realistic failure scenario, its impact, and supporting evidence. State any assumptions. Also ask for an implementation score from 1 to 10 with a short reason. Record each round's score.
-2. Accept findings only when they have a concrete impact on correctness, data safety, security, release, or maintenance. Reject preferences, unrelated work, and cases without realistic impact.
-3. Ask the same reviewer to fix only the accepted findings and run the relevant checks. Use the simplest sufficient fix and follow the testing rules below.
+1. Ask the reviewer to inspect the changes and affected code, then report without changing code. Each finding must include a location, a realistic failure scenario, its impact, and supporting evidence. State any assumptions. Also ask for an implementation score from 1 to 10 based on task fulfillment and material issues, with a short reason. Record each round's score.
+2. Accept findings for unmet requirements, bugs, regressions, data safety or security issues, build or deployment failures, material performance problems, and unnecessary migrations.
+3. Ask the same reviewer to fix only the accepted findings and run the relevant checks. Use the simplest sufficient fix and follow the testing rules below. Reuse project code and widely used, maintained libraries when they simplify an accepted fix. Use the project's ORM when it supports the operation. Use raw SQL only for a concrete functional or performance reason.
 4. After fixes, start another round to review the updated code. Stop when a round has no accepted findings and no material risk needs further review.
 
 Use at most five rounds unless the user specifies another limit.
@@ -30,12 +30,11 @@ Use at most five rounds unless the user specifies another limit.
 ## Review criteria
 
 - Check changed behavior against the requirements and completion criteria. Consider relevant cases: invalid input, failures, empty data, retries, and concurrent operations.
-- Look for duplicate business rules or stored facts, missing constraints or transactions, and tables, fields, or indexes without a current need.
+- Check that constraints and transactions prevent invalid or partially saved data. Report duplicate business rules or stored values when they can produce conflicting results.
 - If the implementation adds a migration, verify that the existing data schema cannot meet the requirements and the migration is necessary. Check that it preserves existing data.
 - Check validation, access checks, and query parameterization in changed input and data flows. Look for exposed secrets.
 - Check configuration, environment variables, migration execution, and external service failures in the target environment. Failures must be visible to callers or operators.
-- Flag unnecessary abstractions, options, dependencies, unused code, debug output, and obsolete fallbacks when they cause a concrete problem. Preserve compatibility with existing callers and stored data.
-- Reuse project code and widely used, maintained libraries when they simplify an accepted fix. Use the project's ORM when it supports the operation. Use raw SQL only for a concrete functional or performance reason.
+- Check compatibility with existing callers and stored data unless the task explicitly changes those contracts.
 
 ## Testing
 
