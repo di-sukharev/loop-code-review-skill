@@ -1,60 +1,55 @@
 ---
 name: loop-code-review
 description: >-
-  Fresh reviewer agents find and fix bugs, data model flaws, security gaps,
-  leftovers, and needless complexity before release. Use when the user asks for
-  loop-code-review or another skill calls it.
+  Fresh reviewer sub-agents find and fix material problems in code changes through independent review rounds. Aim for an implementation that is correct and elegant DX-wise. Use this skill before committing changes.
 ---
 
-Run independent code review in a loop. Find and fix material problems before release at the lowest total cost.
-Follow project rules. Use English with agents and the user's language with the user.
+Follow project rules. Use English with the sub-agents and the user's language with the user.
+
+## Scope and reviewer
+
+In every round, review the full diff against HEAD and untracked files. Use a different scope when the user specifies one. Do not change staging.
+
+Start each round with a fresh sub-agent that has no chat history. Give it the repository path, requirements, completion criteria, and the review criteria below.
+Do not pass author explanations, implementation plans, or earlier review findings and scores.
+
+Follow the user's model and effort choices. Otherwise, choose by risk:
+
+- For high-risk changes, use the strongest available Sol or Opus model at high effort. High risk includes stored data, migrations, security, concurrency, external contracts, and failures across multiple modules.
+- For other changes, use a capable general model at medium effort.
 
 ## Review loop
 
-Start each round with a fresh subagent. Exclude chat history, author explanations, and previous review conclusions.
-Default to staged and unstaged Git changes and untracked files unless another scope is specified.
-Give it the repository path, requirements, Definition of Done (DoD), and review criteria below.
+1. Ask the reviewer to inspect the changes and affected code, then report without changing code. Each finding must include a location, a realistic failure scenario, its impact, and supporting evidence. State any assumptions. Also ask for an implementation score from 1 to 10 with a short reason. Record each round's score.
+2. Accept findings only when they have a concrete impact on correctness, data safety, security, release, or maintenance. Reject preferences, unrelated work, and cases without realistic impact.
+3. Ask the same reviewer to fix only the accepted findings and run the relevant checks. Use the simplest sufficient fix and follow the testing rules below.
+4. After fixes, start another round to review the updated code. Stop when a round has no accepted findings and no material risk needs further review.
 
-Choose among available models and effort levels. Follow the user's choices.
-Use the most capable model (Opus or Sol) and high effort for high-risk changes.
-These include stored data, migrations, security, concurrency, external contracts, and failures across components.
-Use a capable general model and medium effort for other changes.
-
-Ask the subagent to review the changes and affected code. Require a location, concrete scenario, impact, and evidence for each finding.
-Ask it to score the task implementation from 1 to 10, with one reason. Track scores across rounds without showing previous scores to new reviewers.
-Have the reviewer report findings and stop. Accept problems with concrete effects on correctness, data safety, security, release, or maintenance.
-Reject preferences, unrelated work, and cases without realistic impact. Mark assumptions.
-Save each reviewed code state before fixes. Compare later edits against it and review affected code. Preserve the user's staging choices.
-Ask the same reviewer to fix accepted findings and run affected checks.
-Where possible, write a failing regression test first. Fix causes with the simplest sufficient change and avoid unrelated cleanup.
-
-Use at most five review rounds unless instructed otherwise. Stop when accepted findings are fixed and no material risk needs further review.
+Use at most five rounds unless the user specifies another limit.
 
 ## Review criteria
 
-Assume you will maintain this code for ten years. Refactor each module you change to meet these standards.
-Meet the requirements and DoD. Handle invalid input, failures, empty data, repeated actions, and concurrent operations.
-Write clear code. Prefer declarative code. Keep modules easy to change, run, and test.
-Use clear names, explicit dependencies, and existing project patterns.
-Reuse project code and dependencies. Keep one implementation per business rule.
-Add widely used, actively maintained libraries in the project's stack when they clearly simplify the solution.
-Add abstractions, layers, options, and dependencies only for current needs.
-Delete needless code. Remove debug output, temporary files, and obsolete fallbacks within task scope.
-Preserve compatibility code still needed by existing callers or stored data.
+- Check changed behavior against the requirements and completion criteria. Consider relevant cases: invalid input, failures, empty data, retries, and concurrent operations.
+- Look for duplicate business rules or stored facts, missing constraints or transactions, and tables, fields, or indexes without a current need.
+- If the implementation adds a migration, verify that the existing data schema cannot meet the requirements and the migration is necessary. Check that it preserves existing data.
+- Check validation, access checks, and query parameterization in changed input and data flows. Look for exposed secrets.
+- Check configuration, environment variables, migration execution, and external service failures in the target environment. Failures must be visible to callers or operators.
+- Flag unnecessary abstractions, options, dependencies, unused code, debug output, and obsolete fallbacks when they cause a concrete problem. Preserve compatibility with existing callers and stored data.
+- Reuse project code and widely used, maintained libraries when they simplify an accepted fix. Use the project's ORM when it supports the operation. Use raw SQL only for a concrete functional or performance reason.
 
-Model the domain with one source of truth per fact. Use strict types, constraints, and transactions to protect data.
-Each table, field, and index must have a current need. Migrations must keep existing data correct.
-Use the project's ORM where it supports the operation. Raw SQL needs a concrete functional or performance reason.
+## Testing
 
-Validate external input, enforce access checks, and parameterize database queries. Keep secrets out of code, logs, and responses.
-Make failures visible. Check configuration, environment variables, migrations, and external service failures for the target environment.
+Tests must catch meaningful behavioral failures. Do not add unit tests for their own sake, and do not test cosmetic details.
+Prefer simple integration tests against real endpoints and a test database. Tests must exercise the real code under test and remain isolated when run together.
 
-Tests must catch real failures in changed behavior and stay isolated when run together.
-Do not mock the code under test.
+When a regression test is useful and practical, add it before fixing the bug and confirm that it fails for the reported reason.
 
 ## Finish
 
-Report passed only when accepted findings are fixed, relevant checks pass, and required reviews are complete. Otherwise, report open.
-Summarize fixes, rejected findings with reasons, checks, remaining risks, human checks, score history, rounds, models, and effort.
-Distinguish task failures from unrelated failures. Keep unrelated work intact.
-Do not commit, push, deploy, or change shared data without authorization.
+Report `passed` only when all accepted findings are fixed, relevant checks pass, and required independent reviews are complete.
+Otherwise, report `open`, including when the round limit leaves work unfinished.
+
+Summarize fixes, rejected findings and reasons, checks run, unresolved risks, and any checks left for the user.
+Include the score history, number of rounds, and models and effort used. Distinguish failures caused by the task from unrelated failures.
+
+Keep unrelated work intact. Do not commit, push, deploy, or change shared data without authorization.
